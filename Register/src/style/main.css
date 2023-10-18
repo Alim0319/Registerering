@@ -1,0 +1,21 @@
+:root {
+  align-items: center;
+  justify-content: center;
+}
+
+body {
+  align-items: center;
+  justify-self: start;
+}
+
+.d-flex {
+  background-color: gainsboro;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.bg-white {
+  margin-top: 40px;
+  width: 50%;
+}

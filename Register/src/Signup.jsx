@@ -1,12 +1,12 @@
 //import { useState } from "react";
-
+import "./style/main.css";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function Signup() {
-  const [firstName, setFirstName] = useState("");
+  const [firstName, setFirstName] = useState();
   const [middleName, setMiddleName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -74,9 +74,10 @@ function Signup() {
   };
 
   return (
-    <div className="d-flex justify-content-center algin-items-center bg-secondary vh-100">
-      <div className="bg-white p-3 roundet w-25">
+    <div className="d-flex ">
+      <div className="bg-white">
         <h2>Register</h2>
+
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="fristName" className="form-label">
@@ -188,7 +189,7 @@ function Signup() {
               <option value="">Select Country Code</option>
               {countryCodes.map((country) => (
                 <option key={country.code} value={country.code}>
-                  {country.name} ({country.code})
+                  {country.emoji} {country.dial_code} ({country.code})
                 </option>
               ))}
             </select>
