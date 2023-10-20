@@ -23,12 +23,24 @@ function Signup() {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  useEffect(() => {
+  /*useEffect(() => {
     fetch("./src/countryCodes.json")
       .then((response) => response.json())
       .then((data) => setCountryCodes(data))
       .catch((error) => console.error("Error loading country codes:", error));
   }, []); // The empty array as the second argument ensures this effect runs only once
+*/
+  useEffect(() => {
+    // Hent landkoder fra en JSON-fil eller et API (erstatt med din egen kilde)
+    axios
+      .get("http://example.com/countryCodes") // Endre til din faktiske kilde
+      .then((response) => {
+        setCountryCodes(response.data);
+      })
+      .catch((error) => {
+        console.error("Feil under henting av landkoder:", error);
+      });
+  }, []); // Denne effekten skal kjøre en gang ved innlasting
 
   const navigate = useNavigate();
 
@@ -65,12 +77,19 @@ function Signup() {
     };
 
     axios
-      .post("http://localhost:3500/register", data)
-      .then((result) => {
-        console.log(result);
-        navigate("/login");
+      .post("http://localhost:3500/register", data) // Endre URL til ditt faktiske server-endepunkt
+      .then((response) => {
+        if (response.status === 201) {
+          // Registreringen var vellykket, naviger brukeren til innloggingssiden
+          navigate("/login");
+        } else {
+          // Håndter eventuelle feil i henhold til serverresponsen
+          console.log("Registrering mislyktes");
+        }
       })
-      .catch((err) => console.log(err));
+      .catch((error) => {
+        console.error("Feil under POST-forespørsel:", error);
+      });
   };
 
   return (

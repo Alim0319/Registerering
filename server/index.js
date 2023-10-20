@@ -1,50 +1,67 @@
 require("dotenv").config();
 const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const CustomerModel = require("./server/models/Customer");
-const bcrypt = require("bcrypt");
-
 const app = express();
+const http = require("http");
+const mongoose = require("mongoose");
+const path = require("path");
+const fs = require("fs");
+const cors = require("cors");
+const fsPromises = require("fs").promises;
+const corsOptions = require("./config/corsOptions");
+const CustomerModel = require("./models/Customer");
+const bcrypt = require("bcrypt");
+const envRouter = require("./routes/apiRouter");
+const { logger } = require("./middleware/logEvent");
+const errorHandler = require("./middleware/errorHandler");
+
+//Middleware
+
+//app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
+app.use(
+  express.static(path.join(__dirname, "../register/public", "index.html"))
+);
+//app.use(logger);
+//app.use(errorHandler);
+app.use(cors(corsOptions));
+app.use("/env", envRouter);
+
+//Routes
+
+//app.use("/subdir", require("./routes/subdir"));
+//app.use("/", require("./routes/root"));
+app.use("/Customers", require("./routes/Customers"));
+app.use("/register", require("./routes/register"));
+app.use("/auth", require("./routes/auth"));
 
 //homebrew middlewarews import
-const connectDB = require("./server/config/dbConn");
+const connectDB = require("./config/dbConn");
+const router = require("./routes/apiRouter");
 //const { Console } = require("console");
 
 //DBConnection
 connectDB();
+const htmlFilePath = path.join(__dirname, "../Register/index.html");
+
+app.get("*", (req, res) => {
+  // Her kan du sende en velkomstmelding eller laste inn en HTML-fil, avhengig av hva du vil vise på rotkatalogen.
+  //res.sendFile(path.join(registerPath, "index.html"));
+  //res.send("Velkommen til serveren!");
+  res.sendFile(htmlFilePath);
+});
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  /*CustomerModel.findOne({ email: email }).then((user) => {
-    if (user) {
-      if (user.password === password) {
-        res.json("Success");
-      } else {
-        res.json("the password is incorrect");
-      }
-    } else {
-      res.json("No record existed");
-    }
-  });
-});
-app.post("/register", (req, res) => {
-  CustomerModel.create(req.body)
-    .then((Customeres) => res.json(Customeres))
-    .catch((err) => res.json(err));
-});
-
-mongoose.connection.once("open", () => {
-  console.log("Connected to MongoDB");
-  app.listen(3500, () => console.log(`Server running on port ${PORT}`));
-});*/
 
   try {
     const user = await CustomerModel.findOne({ email: email });
     if (user) {
-      const isPasswordValid = await bcrypt.compare(password, user.password);
+      const isPasswordValid = await bcrypt.compare(
+        password,
+        user.user.password
+      );
       if (isPasswordValid) {
         return res.json({ message: "Login successful" });
       } else {

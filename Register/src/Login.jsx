@@ -12,13 +12,17 @@ function Login() {
     e.preventDefault();
     axios
       .post("http://localhost:3500/login", { email, Password })
-      .then((result) => {
-        console.log(result);
-        if (result.data === "Success") {
+      .then((response) => {
+        console.log(response);
+        if (response.data.message === "Login Success") {
           navigate("/home");
+        } else {
+          console.log("Login failed");
         }
       })
-      .catch((err) => console.log(err));
+      .catch((error) => {
+        console.error("Feil under GET-forespørsel:", error);
+      });
   };
   return (
     <div className="d-flex justify-content-center algin-items-center bg-secondary vh-100">
