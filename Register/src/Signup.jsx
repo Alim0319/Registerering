@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+//import { connect } from 'react-redux';
+//import { registerUser } from './redux/userActions';
 
 function Signup() {
   const [firstName, setFirstName] = useState();
@@ -23,13 +25,13 @@ function Signup() {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  /*useEffect(() => {
+  useEffect(() => {
     fetch("./src/countryCodes.json")
       .then((response) => response.json())
       .then((data) => setCountryCodes(data))
       .catch((error) => console.error("Error loading country codes:", error));
   }, []); // The empty array as the second argument ensures this effect runs only once
-*/
+
   useEffect(() => {
     // Hent landkoder fra en JSON-fil eller et API (erstatt med din egen kilde)
     axios
@@ -92,6 +94,58 @@ function Signup() {
       });
   };
 
+  /*function Signup(props) {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    email: '',
+    confirmEmail: '',
+    password: '',
+    confirmPassword: '',
+    address: '',
+    country: '',
+    city: '',
+    postCode: '',
+    selectedCountryCode: '',
+    phoneNumber: `${selectedCountryCode} ${phoneNumber}`,
+  });
+
+  const [showPassword] = useState(false);
+
+  useEffect(() => {
+    fetch("./src/countryCodes.json")
+      .then((response) => response.json())
+      .then((data) => selectedCountryCode(data))
+      .catch((error) => console.error("Error loading country codes:", error));
+  }, []); 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (email !== confirmEmail) {
+      alert("Email and confirm email do not match.");
+      return;
+    }
+  
+    if (password !== confirmPassword) {
+      alert("Password and confirm password do not match.");
+      return;
+    }
+
+    // Opprett et brukerobjekt med dataene fra skjemaet
+    const userData = { ...formData };
+
+    // Kall Redux-handlingen for å registrere brukeren
+    props.registerUser(userData);
+  };*/
+
   return (
     <div className="d-flex ">
       <div className="bg-white">
@@ -108,6 +162,7 @@ function Signup() {
               autoComplete="off"
               name="fristName"
               className="form-control"
+              value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
             />
           </div>
@@ -121,6 +176,7 @@ function Signup() {
               autoComplete="off"
               name="middleName"
               className="form-control rounded-0"
+              value={middleName}
               onChange={(e) => setMiddleName(e.target.value)}
             />
           </div>
@@ -134,6 +190,7 @@ function Signup() {
               autoComplete="off"
               name="lastName"
               className="form-control rounded-0"
+              value={lastName}
               onChange={(e) => setLastName(e.target.value)}
             />
           </div>
@@ -147,6 +204,7 @@ function Signup() {
               autoComplete="off"
               name="email"
               className="form-control rounded-0"
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
@@ -160,6 +218,7 @@ function Signup() {
               autoComplete="off"
               name="confirmEmail"
               className="form-control rounded-0"
+              value={confirmEmail}
               onChange={(e) => setConfirmEmail(e.target.value)}
             />
           </div>
@@ -174,14 +233,9 @@ function Signup() {
               autoComplete="off"
               name="password"
               className="form-control rounded-0"
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <i
-              onClick={togglePasswordVisibility}
-              className={`password-icon ${showPassword ? "visible" : "hidden"}`}
-            >
-              {showPassword ? "Hide password" : "Show password"}
-            </i>
           </div>
           <div className="mb-3">
             <label htmlFor="confirmPassword" className="form-label">
@@ -193,7 +247,13 @@ function Signup() {
               autoComplete="off"
               name="confirmPassword"
               className="form-control rounded-0"
+              value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+            <input
+              type="checkbox"
+              onChange={togglePasswordVisibility}
+              checked={showPassword}
             />
           </div>
           <div className="mb-3">
@@ -203,6 +263,7 @@ function Signup() {
             <select
               name="selectedCountryCode"
               className="form-control rounded-0"
+              value={selectedCountryCode}
               onChange={(e) => setSelectedCountryCode(e.target.value)}
             >
               <option value="">Select Country Code</option>
@@ -293,4 +354,69 @@ function Signup() {
     </div>
   );
 }
+//const mapStateToProps = (state) => ({
+// user: state.user,
+//});
+
+//const mapDispatchToProps = {
+// registerUser, // Sjekk om dette navnet samsvarer med det eksporterte navnet fra userActions.js
+//};
+
 export default Signup;
+// SignUp.js
+
+/*import  { useState } from 'react';
+import { connect } from 'react-redux';
+import { registerUser } from './redux/actions/userActions'; // Du må erstatte 'registerUser' med din faktiske Redux-handlingskreatør.
+
+function Signup(props) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const userData = {
+      email,
+      password,
+    };
+
+    // Kall Redux-handlingen for å registrere brukeren
+    props.registerUser(userData);
+  };
+
+  return (
+    <div>
+      <h2>Register</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="email">Email</label>
+          <input
+            type="text"
+            name="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            name="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  );
+}
+
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
+
+const mapDispatchToProps = {
+  registerUser, // Dette må samsvare med den faktiske importerte Redux-handlingen
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);*/
