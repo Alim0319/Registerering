@@ -1,10 +1,15 @@
 // redux/reducers/index.js
-import { combineReducers } from "redux";
-import someReducer from "./someReducer"; // Importer andre reducere
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import App from "./App";
+import store from "./store";
 
-const rootReducer = combineReducers({
-  some: someReducer,
-  // Legg til andre reducere her
-});
-
-export default rootReducer;
+ReactDOM.render(
+  <Provider store={store}>
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  </Provider>,
+  document.getElementById("root")
+);
