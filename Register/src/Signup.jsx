@@ -421,7 +421,7 @@ const mapDispatchToProps = {
 
 export default connect(mapStateToProps, mapDispatchToProps)(Signup);*/
 
-import { useState, useEffect } from "react";
+/*import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -713,6 +713,60 @@ function Signup() {
         >
           Login
         </Link>
+      </div>
+    </div>
+  );
+}
+
+export default Signup;*/
+
+import { useState } from "react";
+//import { Link } from "react-router-dom";
+//import axios from "axios";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import "survey-core/defaultV2.min.css";
+import { useNavigate } from "react-router-dom";
+import {
+  Survey,
+  SurveyButtonNext,
+  SurveyButtonComplete,
+} from "survey-react-ui"; // Note the import change
+import surveyJson from "./surveyJson";
+
+function Signup() {
+  const navigate = useNavigate(); // Initialize the navigate function
+  const [birthDate, setBirthDate] = useState(new Date());
+  // ... (other state variables)
+
+  const handleDateChange = (date) => {
+    setBirthDate(date);
+  };
+  const surveySubmit = (survey) => {
+    // Handle the survey submission (e.g., send the survey data to your server)
+    console.log("Survey data:", survey.data);
+    console.log("Birth date:", birthDate);
+
+    // Redirect to login page after completing the survey
+    navigate("/login");
+  };
+
+  return (
+    <div>
+      <div>
+        <h2>Register</h2>
+
+        {/* Survey component */}
+        <Survey
+          json={surveyJson}
+          onComplete={surveySubmit}
+          css={{ navigationButton: "btn btn-primary" }} // You can customize the style
+        >
+          {/* Survey buttons */}
+          <DatePicker selected={birthDate} onChange={handleDateChange} />
+          <SurveyButtonNext />
+          <SurveyButtonComplete />
+        </Survey>
       </div>
     </div>
   );
