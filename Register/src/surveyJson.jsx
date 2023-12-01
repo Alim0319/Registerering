@@ -4,22 +4,26 @@ const surveyJson = {
       name: "firstName",
       title: "Enter your first name:",
       type: "text",
+      isRequired: true,
     },
     {
       name: "middleName",
       title: "Enter your middle name:",
       type: "text",
+      isRequired: true,
     },
     {
       name: "lastName",
       title: "Enter your last name:",
       type: "text",
+      isRequired: true,
     },
     {
       name: "birthDate",
       title: "Enter your birth date:",
       type: "text",
       inputType: "date",
+      isRequired: true,
     },
     {
       name: "phoneCountryCode",
