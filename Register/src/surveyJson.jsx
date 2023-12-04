@@ -2,19 +2,22 @@ const surveyJson = {
   elements: [
     {
       name: "firstName",
-      title: "Enter your first name:",
+      placeHolder: "Enter your first name",
+      title: "First name:",
       type: "text",
       isRequired: true,
     },
     {
       name: "middleName",
-      title: "Enter your middle name:",
+      title: "Middle name:",
+      placeHolder: "Enter your middle name",
       type: "text",
       isRequired: true,
     },
     {
       name: "lastName",
-      title: "Enter your last name:",
+      title: "Last name:",
+      placeHolder: "Enter your last name",
       type: "text",
       isRequired: true,
     },
@@ -26,17 +29,31 @@ const surveyJson = {
       isRequired: true,
     },
     {
-      name: "phoneCountryCode",
-      title: "Enter your phone country code:",
-      type: "text",
-      isRequired: true,
+      type: "paneldynamic",
+      name: "phoneSection",
+      title: "Phone Number",
+      templateElements: [
+        {
+          name: "phoneCountryCode",
+          title: "Select your phone country code:",
+          type: "dropdown",
+          isRequired: true,
+          choicesByUrl: {
+            url: "./src/countryCodes.json",
+            titleName: "dial_code",
+            valueName: "name",
+          },
+        },
+        {
+          name: "phoneNumber",
+          title: "Enter your phone number:",
+          type: "text",
+          isRequired: true,
+        },
+      ],
+      panelCount: 1,
     },
-    {
-      name: "phoneNumber",
-      title: "Enter your phone number:",
-      type: "text",
-      isRequired: true,
-    },
+
     {
       name: "address",
       title: "Enter your address:",
