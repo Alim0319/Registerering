@@ -720,9 +720,7 @@ function Signup() {
 
 export default Signup;*/
 
-import { useState } from "react";
-//import { Link } from "react-router-dom";
-//import axios from "axios";
+import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "survey-core/defaultV2.min.css";
@@ -731,41 +729,66 @@ import {
   Survey,
   SurveyButtonNext,
   SurveyButtonComplete,
-} from "survey-react-ui"; // Note the import change
+} from "survey-react-ui";
+import SurveyComponent from "./SurveyComponent";
 import surveyJson from "./surveyJson";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Signup() {
-  const navigate = useNavigate(); // Initialize the navigate function
+  const navigate = useNavigate();
   const [birthDate, setBirthDate] = useState(new Date());
-  // ... (other state variables)
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible((prev) => !prev);
+  };
+
+  useEffect(() => {
+    // Finn knappen etter klassenavnet og endre teksten
+    const completeButton = document.querySelector(
+      ".sd-navigation__complete-btn"
+    );
+    if (completeButton) {
+      completeButton.value = "Register";
+    }
+  }, []); // Kjør denne effekten kun en gang etter første rendring
 
   const handleDateChange = (date) => {
     setBirthDate(date);
   };
+
   const surveySubmit = (survey) => {
-    // Handle the survey submission (e.g., send the survey data to your server)
     console.log("Survey data:", survey.data);
     console.log("Birth date:", birthDate);
-
-    // Redirect to login page after completing the survey
     navigate("/login");
   };
 
   return (
     <div>
       <div>
-        <h2>Register</h2>
-
-        {/* Survey component */}
         <Survey
           json={surveyJson}
           onComplete={surveySubmit}
-          css={{ navigationButton: "btn btn-primary" }} // You can customize the style
+          css={{ navigationButton: "btn btn-primary" }}
         >
-          {/* Survey buttons */}
+          <SurveyComponent surveyJson={surveyJson} onComplete={surveySubmit} />
           <DatePicker selected={birthDate} onChange={handleDateChange} />
+          <div>
+            <label>Password:</label>
+            <input
+              type={passwordVisible ? "text" : "password"}
+              name="password"
+              required
+            />
+            <FontAwesomeIcon
+              icon={passwordVisible ? faEyeSlash : faEye}
+              style={{ cursor: "pointer" }}
+              onClick={togglePasswordVisibility}
+            />
+          </div>
           <SurveyButtonNext />
-          <SurveyButtonComplete />
+          <SurveyButtonComplete text="Register" />
         </Survey>
       </div>
     </div>

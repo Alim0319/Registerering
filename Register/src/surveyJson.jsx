@@ -28,32 +28,24 @@ const surveyJson = {
       inputType: "date",
       isRequired: true,
     },
-    {
-      type: "paneldynamic",
-      name: "phoneSection",
-      title: "Phone Number",
-      templateElements: [
-        {
-          name: "phoneCountryCode",
-          title: "Select your phone country code:",
-          type: "dropdown",
-          isRequired: true,
-          choicesByUrl: {
-            url: "./src/countryCodes.json",
-            titleName: "dial_code",
-            valueName: "name",
-          },
-        },
-        {
-          name: "phoneNumber",
-          title: "Enter your phone number:",
-          type: "text",
-          isRequired: true,
-        },
-      ],
-      panelCount: 1,
-    },
 
+    {
+      name: "phoneCountryCode",
+      title: "Enter your phone country code:",
+      type: "dropdown",
+      isRequired: true,
+      choicesByUrl: {
+        url: "./src/countryCodes.json",
+        valueName: "value",
+        titleName: "text",
+      },
+    },
+    {
+      name: "phoneNumber",
+      title: "Enter your phone number:",
+      type: "text",
+      isRequired: true,
+    },
     {
       name: "address",
       title: "Enter your address:",
@@ -68,14 +60,14 @@ const surveyJson = {
       validators: [
         {
           type: "regex",
-          regex: "@",
+          regex: "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$",
 
           text: "Enter a valid email address",
         },
         {
           type: "minlength", // Add a custom validator for minimum length
           min: 8, // Set your desired minimum length
-          text: "Email must be at least 8 characters",
+          text: "Email must be at least 15 characters",
         },
       ],
     },
@@ -94,8 +86,16 @@ const surveyJson = {
       isRequired: true,
       validators: [
         {
-          type: "text",
-          minLength: 8,
+          type: "expression",
+          expression:
+            "value.length >= 8 && /[a-z]/.test(value) && /[A-Z]/.test(value) && /[0-9]/.test(value)",
+          text: "Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, and one digit.",
+          onValidated: function (sender, options) {
+            const messageElement = sender.getInputElement().nextSibling;
+            messageElement.innerHTML = options.isValid
+              ? '<span style="color:green;">Password meets requirements</span>'
+              : '<span style="color:red;">' + options.errorText + "</span>";
+          },
         },
       ],
     },
@@ -107,10 +107,22 @@ const surveyJson = {
       isRequired: true,
       validators: [
         {
-          type: "text",
-          minLength: 8,
+          type: "expression",
+          expression: "value === {password}",
+          text: "Passwords must match.",
+          onValidated: function (sender, options) {
+            const messageElement = sender.getInputElement().nextSibling;
+            messageElement.innerHTML = options.isValid
+              ? '<span style="color:green;">Passwords match</span>'
+              : '<span style="color:red;">' + options.errorText + "</span>";
+          },
         },
       ],
+    },
+    {
+      type: "html",
+      name: "passwordMessage",
+      html: '<div id="passwordMessage"></div>',
     },
   ],
 };
