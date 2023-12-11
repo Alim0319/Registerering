@@ -31,7 +31,8 @@ const surveyJson = {
 
     {
       name: "phoneCountryCode",
-      title: "Enter your phone country code:",
+      placeHolder: "Enter your phone country code",
+      title: " country",
       type: "dropdown",
       isRequired: true,
       choicesByUrl: {
@@ -42,19 +43,22 @@ const surveyJson = {
     },
     {
       name: "phoneNumber",
-      title: "Enter your phone number:",
+      placeHolder: "Enter your phone number",
+      title: "phone number:",
       type: "text",
       isRequired: true,
     },
     {
       name: "address",
-      title: "Enter your address:",
+      placeHolder: "Enter your address",
+      title: "address",
       type: "text",
       isRequired: true,
     },
     {
       name: "email",
-      title: "Enter your email:",
+      placeHolder: "Enter your email",
+      title: "Email:",
       type: "text",
       isRequired: true,
       validators: [
@@ -73,14 +77,16 @@ const surveyJson = {
     },
     {
       name: "confirmEmail",
-      title: "Confirm your email:",
+      placeHolder: "Confirm your email",
+      title: "Confirm Email:",
       type: "text",
       isRequired: true,
     },
 
     {
       name: "password",
-      title: "Enter your password:",
+      placeHolder: "Enter your password",
+      title: "Password:",
       type: "text", // Change this to "password" if you're using a password input
       inputType: "password", // survey-react-ui-specific property for input type
       isRequired: true,
@@ -101,6 +107,7 @@ const surveyJson = {
     },
     {
       name: "confirmPassword",
+      placeHolder: "Confirm your password",
       title: "Confirm your password:",
       type: "text", // Change this to "password" if you're using a password input
       inputType: "password", // survey-react-ui-specific property for input type
