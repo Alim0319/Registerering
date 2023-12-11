@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Survey } from "react-survey";
 
 const SurveyComponent = ({ surveyJson, onComplete }) => {
-  console.log("Rendering SurveyComponent");
+  // console.log("Rendering SurveyComponent");
   return <Survey json={surveyJson} onComplete={onComplete} />;
 };
 SurveyComponent.propTypes = {

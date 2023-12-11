@@ -727,7 +727,7 @@ import "survey-core/defaultV2.min.css";
 import { useNavigate } from "react-router-dom";
 import {
   Survey,
-  SurveyButtonNext,
+  SurveyNavigation,
   SurveyButtonComplete,
 } from "survey-react-ui";
 import SurveyComponent from "./SurveyComponent";
@@ -745,14 +745,13 @@ function Signup() {
   };
 
   useEffect(() => {
-    // Finn knappen etter klassenavnet og endre teksten
     const completeButton = document.querySelector(
       ".sd-navigation__complete-btn"
     );
     if (completeButton) {
       completeButton.value = "Register";
     }
-  }, []); // Kjør denne effekten kun en gang etter første rendring
+  }, []);
 
   const handleDateChange = (date) => {
     setBirthDate(date);
@@ -761,6 +760,7 @@ function Signup() {
   const surveySubmit = (survey) => {
     console.log("Survey data:", survey.data);
     console.log("Birth date:", birthDate);
+    console.log("passwordVisible :", passwordVisible);
     navigate("/login");
   };
 
@@ -787,7 +787,7 @@ function Signup() {
               onClick={togglePasswordVisibility}
             />
           </div>
-          <SurveyButtonNext />
+          <SurveyNavigation />
           <SurveyButtonComplete text="Register" />
         </Survey>
       </div>

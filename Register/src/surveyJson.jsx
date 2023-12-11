@@ -94,7 +94,7 @@ const surveyJson = {
         {
           type: "expression",
           expression:
-            "value.length >= 8 && /[a-z]/.test(value) && /[A-Z]/.test(value) && /[0-9]/.test(value)",
+            "value.length >=   /[a-z]/.test(value) && /[A-Z]/.test(value) && /[0-9]/.test(value)",
           text: "Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, and one digit.",
           onValidated: function (sender, options) {
             const messageElement = sender.getInputElement().nextSibling;
@@ -109,8 +109,8 @@ const surveyJson = {
       name: "confirmPassword",
       placeHolder: "Confirm your password",
       title: "Confirm your password:",
-      type: "text", // Change this to "password" if you're using a password input
-      inputType: "password", // survey-react-ui-specific property for input type
+      type: "text",
+      inputType: "password",
       isRequired: true,
       validators: [
         {
@@ -118,6 +118,11 @@ const surveyJson = {
           expression: "value === {password}",
           text: "Passwords must match.",
           onValidated: function (sender, options) {
+            const isValid = options.isValid;
+            const errorText = isValid
+              ? "Password meets requirements"
+              : options.errorText;
+            console.log(errorText);
             const messageElement = sender.getInputElement().nextSibling;
             messageElement.innerHTML = options.isValid
               ? '<span style="color:green;">Passwords match</span>'
