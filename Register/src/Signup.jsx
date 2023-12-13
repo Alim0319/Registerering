@@ -720,7 +720,7 @@ function Signup() {
 
 export default Signup;*/
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "survey-core/defaultV2.min.css";
@@ -739,6 +739,7 @@ function Signup() {
   const navigate = useNavigate();
   const [birthDate, setBirthDate] = useState(new Date());
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [password, setPassword] = useState("");
 
   const togglePasswordVisibility = () => {
     setPasswordVisible((prev) => !prev);
@@ -757,40 +758,55 @@ function Signup() {
     setBirthDate(date);
   };
 
+  const validatePassword = () => {
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasDigit = /\d/.test(password);
+    const isLengthValid = password.length >= 8;
+
+    return hasUpperCase && hasDigit && isLengthValid && hasLowerCase;
+  };
+
   const surveySubmit = (survey) => {
     console.log("Survey data:", survey.data);
     console.log("Birth date:", birthDate);
-    console.log("passwordVisible :", passwordVisible);
+    //console.log("Is Password Valid:", validatePassword());
     navigate("/login");
   };
 
   return (
     <div>
-      <div>
-        <Survey
-          json={surveyJson}
-          onComplete={surveySubmit}
-          css={{ navigationButton: "btn btn-primary" }}
-        >
-          <SurveyComponent surveyJson={surveyJson} onComplete={surveySubmit} />
+      <Survey
+        json={surveyJson}
+        onComplete={surveySubmit}
+        css={{ navigationButton: "btn btn-primary" }}
+      >
+        <SurveyComponent surveyJson={surveyJson} onComplete={surveySubmit} />
+        <div>
+          <label>Date of Birth:</label>
           <DatePicker selected={birthDate} onChange={handleDateChange} />
-          <div>
-            <label>Password:</label>
-            <input
-              type={passwordVisible ? "text" : "password"}
-              name="password"
-              required
-            />
-            <FontAwesomeIcon
-              icon={passwordVisible ? faEyeSlash : faEye}
-              style={{ cursor: "pointer" }}
-              onClick={togglePasswordVisibility}
-            />
-          </div>
-          <SurveyNavigation />
-          <SurveyButtonComplete text="Register" />
-        </Survey>
-      </div>
+        </div>
+        <div>
+          <label>Password:</label>
+          <input
+            type={passwordVisible ? "text" : "password"}
+            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <FontAwesomeIcon
+            icon={passwordVisible ? faEyeSlash : faEye}
+            style={{ cursor: "pointer" }}
+            onClick={togglePasswordVisibility}
+          />
+        </div>
+        <SurveyNavigation />
+        <SurveyButtonComplete
+          text="Register"
+          isDisabled={!validatePassword()}
+        />
+      </Survey>
     </div>
   );
 }

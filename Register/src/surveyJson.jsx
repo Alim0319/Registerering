@@ -87,21 +87,29 @@ const surveyJson = {
       name: "password",
       placeHolder: "Enter your password",
       title: "Password:",
-      type: "text", // Change this to "password" if you're using a password input
-      inputType: "password", // survey-react-ui-specific property for input type
+      type: "password", // Endret fra "text" til "password"
+      inputType: "password", // survey-react-ui-spesifikk egenskap for input type
       isRequired: true,
       validators: [
         {
           type: "expression",
-          expression:
-            "value.length >=   /[a-z]/.test(value) && /[A-Z]/.test(value) && /[0-9]/.test(value)",
-          text: "Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, and one digit.",
-          onValidated: function (sender, options) {
-            const messageElement = sender.getInputElement().nextSibling;
-            messageElement.innerHTML = options.isValid
-              ? '<span style="color:green;">Password meets requirements</span>'
-              : '<span style="color:red;">' + options.errorText + "</span>";
-          },
+          expression: "value.length >= 8",
+          text: "Password must be at least 8 characters long.",
+        },
+        {
+          type: "expression",
+          expression: "/[A-Z]/.test(value)",
+          text: "Password must contain at least one uppercase letter.",
+        },
+        {
+          type: "expression",
+          expression: "/[a-z]/.test(value)",
+          text: "Password must contain at least one lowercase letter.",
+        },
+        {
+          type: "expression",
+          expression: "/\\d/.test(value)",
+          text: "Password must contain at least one digit.",
         },
       ],
     },
@@ -115,19 +123,8 @@ const surveyJson = {
       validators: [
         {
           type: "expression",
-          expression: "value === {password}",
-          text: "Passwords must match.",
-          onValidated: function (sender, options) {
-            const isValid = options.isValid;
-            const errorText = isValid
-              ? "Password meets requirements"
-              : options.errorText;
-            console.log(errorText);
-            const messageElement = sender.getInputElement().nextSibling;
-            messageElement.innerHTML = options.isValid
-              ? '<span style="color:green;">Passwords match</span>'
-              : '<span style="color:red;">' + options.errorText + "</span>";
-          },
+          expression: "value === data['password']",
+          text: "Passwords do not match.",
         },
       ],
     },
